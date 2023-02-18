@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your name"],
   },
+  phone: {
+    type: Number,
+    // required: ["Please enter your phone number"],
+    required: true,
+  },
   email: {
     type: String,
     required: [true, "Please enter your email"],
@@ -20,7 +25,6 @@ const schema = new mongoose.Schema({
     type: String,
     required: [true, "Please enter your password"],
     minLength: [6, "Password must be at least 6 characters"],
-    select: false,
   },
   role: {
     type: String,
@@ -36,11 +40,14 @@ const schema = new mongoose.Schema({
   avatar: {
     public_id: {
       type: String,
-      required: true,
+      require: false,
+
+      default: "",
     },
     url: {
       type: String,
-      required: true,
+      require: false,
+      default: "",
     },
   },
 

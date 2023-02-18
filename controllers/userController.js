@@ -1,6 +1,7 @@
 import { catchAsyncError } from "../middlewares/catchAsyncError.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import { User } from "../models/User.js";
+import { Contact } from "../models/Contact.js";
 import { sendToken } from "../utils/sendToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import crypto from "crypto";
@@ -10,30 +11,43 @@ import getDataUri from "../utils/dataUri.js";
 import { Stats } from "../models/Stats.js";
 
 export const register = catchAsyncError(async (req, res, next) => {
-  const { name, email, password } = req.body;
-  const file = req.file;
+  const { name, email, password, phone } = req.body;
 
-  if (!name || !email || !password || !file)
+  if (!name || !email || !phone || !password)
     return next(new ErrorHandler("Please enter all field", 400));
 
   let user = await User.findOne({ email });
 
   if (user) return next(new ErrorHandler("User Already Exist", 409));
-
-  const fileUri = getDataUri(file);
-  const mycloud = await cloudinary.v2.uploader.upload(fileUri.content);
-
   user = await User.create({
     name,
     email,
+    phone,
     password,
-    avatar: {
-      public_id: mycloud.public_id,
-      url: mycloud.secure_url,
-    },
   });
 
   sendToken(res, user, "Registered Successfully", 201);
+});
+export const contact = catchAsyncError(async (req, res, next) => {
+  const { name, email, phone, message } = req.body;
+
+  if (!name || !phone)
+    return next(new ErrorHandler("Please enter all field", 400));
+
+  let contact = Contact;
+
+  // if (user) return next(new ErrorHandler("User Already Exist", 409));
+  contact = await Contact.create({
+    name,
+    phone,
+    message,
+  });
+
+  res.status(200).json({
+    success: true,
+    message,
+    contact,
+  });
 });
 
 export const login = catchAsyncError(async (req, res, next) => {
@@ -299,13 +313,13 @@ export const deleteMyProfile = catchAsyncError(async (req, res, next) => {
     });
 });
 
-User.watch().on("change", async () => {
-  const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
+// User.watch().on("change", async () => {
+//   const stats = await Stats.find({}).sort({ createdAt: "desc" }).limit(1);
 
-  const subscription = await User.find({ "subscription.status": "active" });
-  stats[0].users = await User.countDocuments();
-  stats[0].subscription = subscription.length;
-  stats[0].createdAt = new Date(Date.now());
+//   const subscription = await User.find({ "subscription.status": "active" });
+//   stats[0].users = await User.countDocuments();
+//   stats[0].subscription = subscription.length;
+//   stats[0].createdAt = new Date(Date.now());
 
-  await stats[0].save();
-});
+//   await stats[0].save();
+// });

@@ -1,7 +1,10 @@
+import cookieParser from "cookie-parser";
 import express from "express";
 import {
   addToPlaylist,
   changePassword,
+  contact,
+  // contact,
   deleteMyProfile,
   deleteUser,
   forgetPassword,
@@ -20,11 +23,15 @@ import { authorizeAdmin, isAuthenticated } from "../middlewares/auth.js";
 import singleUpload from "../middlewares/multer.js";
 
 const router = express.Router();
+router.use(cookieParser());
 
 // To register a new user
-router.route("/register").post(singleUpload, register);
+router.route("/register").post(register);
 
 // Login
+router.route("/contact").post(contact);
+// router.route("/contact").post(contact);
+
 router.route("/login").post(login);
 
 // logout
