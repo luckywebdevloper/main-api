@@ -1,3 +1,5 @@
+/** @format */
+
 import app from "./app.js";
 import { connectDB } from "./config/database.js";
 import cloudinary from "cloudinary";
@@ -6,6 +8,7 @@ import nodeCron from "node-cron";
 import { Stats } from "./models/Stats.js";
 connectDB();
 
+const PORT = process.env.PORT || 3000;
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLIENT_NAME,
   api_key: process.env.CLOUDINARY_CLIENT_API,
@@ -25,6 +28,6 @@ nodeCron.schedule("0 0 0 5 * *", async () => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is working on port: ${process.env.PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server is working on port: ${PORT}`);
 });
