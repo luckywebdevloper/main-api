@@ -1,3 +1,5 @@
+/** @format */
+
 import express from "express";
 import { config } from "dotenv";
 import ErrorMiddleware from "./middlewares/Error.js";
@@ -19,7 +21,7 @@ app.use(
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: "https://main-web-plum.vercel.app",
     credentials: true,
 
     methods: ["GET", "POST", "PUT", "DELETE"],
