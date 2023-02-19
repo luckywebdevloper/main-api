@@ -8,7 +8,7 @@ import nodeCron from "node-cron";
 import { Stats } from "./models/Stats.js";
 connectDB();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 cloudinary.v2.config({
   cloud_name: process.env.CLOUDINARY_CLIENT_NAME,
   api_key: process.env.CLOUDINARY_CLIENT_API,
